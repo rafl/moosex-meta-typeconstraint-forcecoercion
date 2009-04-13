@@ -78,7 +78,7 @@ sub validate {
     my ($self, $value) = @_;
     my $coerced = $self->_type_constraint->coerce($value);
     return 'coercion failed' if $coerced == $value;
-    return $self->_type_constraint->valudate($coerced);
+    return $self->_type_constraint->validate($coerced);
 }
 
 my $meta = __PACKAGE__->meta;
