@@ -75,9 +75,10 @@ coercing fails the validation will fail, too.
 =cut
 
 sub validate {
-    my ($self, $value) = @_;
+    my ($self, $value, $coerced_ref) = @_;
     my $coerced = $self->_type_constraint->coerce($value);
     return 'Coercion failed' if $coerced == $value;
+    ${ $coerced_ref } = $coerced if $coerced_ref;
     return $self->_type_constraint->validate($coerced);
 }
 
