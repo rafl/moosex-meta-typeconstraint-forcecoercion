@@ -92,7 +92,12 @@ for my $meth (qw/isa can meta/) {
     $meta->add_method($meth => sub {
         my ($self) = shift;
         return $self->$orig(@_) unless blessed $self;
-        return $self->_type_constraint->$meth(@_);
+
+        my $tc = $self->_type_constraint;
+        # this might happen during global destruction
+        return $self->$orig(@_) unless $tc;
+
+        return $tc->$meth(@_);
     });
 }
 
