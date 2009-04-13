@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 14;
 use Moose::Util::TypeConstraints;
 
 use MooseX::Meta::TypeConstraint::ForceCoercion;
@@ -29,3 +29,15 @@ ok( $coercing_tc->check({ affe => 'tiger' }));
 like($coercing_tc->validate(42), qr/^Validation failed/);
 like($coercing_tc->validate({ answer => 42 }), qr/^Coercion failed/);
 is($coercing_tc->validate({ affe => 'tiger' }), undef);
+
+my $coerced;
+like($coercing_tc->validate(42, \$coerced), qr/^Validation failed/);
+is_deeply($coerced, { actual_value => 42 });
+
+undef $coerced;
+like($coercing_tc->validate({ answer => 42 }, \$coerced), qr/^Coercion failed/);
+is($coerced, undef);
+
+undef $coerced;
+is($coercing_tc->validate({ affe => 'tiger' }, \$coerced), undef);
+is_deeply($coerced, { actual_value => { affe => 'tiger' } });
