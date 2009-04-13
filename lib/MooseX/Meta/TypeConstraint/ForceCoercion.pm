@@ -66,11 +66,14 @@ sub check {
     return $self->_type_constraint->check($coerced);
 }
 
-=method validate ($value)
+=method validate ($value, $coerced_ref?)
 
 Same as C<Moose::Meta::TypeConstraint::validate>, except it will always try to
 coerce C<$value> before validating it against the actual type constraint. If
 coercing fails the validation will fail, too.
+
+If coercion was successful and a C<$coerced_ref> references was passed, the
+coerced value will be stored in that.
 
 =cut
 
