@@ -77,7 +77,7 @@ coercing fails the validation will fail, too.
 sub validate {
     my ($self, $value) = @_;
     my $coerced = $self->_type_constraint->coerce($value);
-    return 'coercion failed' if $coerced == $value;
+    return 'Coercion failed' if $coerced == $value;
     return $self->_type_constraint->validate($coerced);
 }
 
