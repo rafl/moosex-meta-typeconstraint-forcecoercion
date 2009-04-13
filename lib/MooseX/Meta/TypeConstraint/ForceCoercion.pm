@@ -48,7 +48,6 @@ has _type_constraint => (
     isa      => 'Moose::Meta::TypeConstraint',
     init_arg => 'type_constraint',
     required => 1,
-    handles  => qr/^(?!(?:validate|check)$)/,
 );
 
 =method check ($value)
@@ -99,6 +98,17 @@ for my $meth (qw/isa can meta/) {
 
         return $tc->$meth(@_);
     });
+}
+
+sub AUTOLOAD {
+    my $self = shift;
+    my ($meth) = (our $AUTOLOAD =~ /([^:]+)$/);
+    return unless blessed $self;
+
+    my $tc = $self->_type_constraint;
+    return unless $tc;
+
+    return $tc->$meth(@_);
 }
 
 $meta->make_immutable;
